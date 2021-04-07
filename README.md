@@ -2,7 +2,7 @@
 ## Final project
 - Prof Brian McFee (bm106)
 
-*Handout date*: 2021-04-07
+*Handout date*: 2021-04-08
 
 *Submission deadline*: 2021-05-18
 
