@@ -12,8 +12,8 @@
 In the final project, you will apply the tools you have learned in this class to solve a realistic, large-scale applied problem.
 There are two options for how you go about this:
 
-1. **The default**: build and evaluate a collaborative-filter based recommender system.  The details and requirements of this option are described below.
-2. **Propose your own**: if you already have sufficient experience with recommender systems and want to try something different, you can propose your own project.  See below on how to go about this.
+1. [**The default**](#option-1-recommender-system): build and evaluate a collaborative-filter based recommender system.  The details and requirements of this option are described below.
+2. [**Propose your own**](#option-2-choose-your-own): if you already have sufficient experience with recommender systems and want to try something different, you can propose your own project.  See below on how to go about this.
 
 
 In either case, you are encouraged to work in **groups of up to 4 students**.
