@@ -32,7 +32,7 @@ In this project, we'll use the [Million Song Dataset](http://millionsongdataset.
 > for Music Information Retrieval Conference (ISMIR 2011), 2011.
 
 The MSD consists of (you guessed it) one million songs, with metadata (artist, album, year, etc), tags, partial lyrics content, and derived acoustic features.  You need not use all of these aspects of the data, but they are available.
-The MSD is hosted in NYU's HPC environment under `/scratch/work/public/MillionSongDataset/`, but we have included helper links under `/scratch/work/courses/DSGA1004-2021/MSD`.
+The MSD is hosted in NYU's HPC environment under `/scratch/work/courses/DSGA1004-2021/MSD`.
 
 The user interaction data comes from the [Million Song Dataset Challenge](https://www.kaggle.com/c/msdchallenge)
 > McFee, B., Bertin-Mahieux, T., Ellis, D. P., & Lanckriet, G. R. (2012, April).
