@@ -140,3 +140,27 @@ It will be helpful to commit your work in progress to the repository.  Toward th
 
 # Option 2: Choose your own
 
+
+To propose an alternative project idea, please fill out the form here: https://forms.gle/3QYv4h8Y4S9qLhGf8 no later than 2021-04-21.
+Any alternative project idea should be of approximately the same scale and complexity as the default option described above, so please consider this carefully.
+We will try to be prompt in responding to your proposal, but note that we may not approve it, or may require modifications to your plan.
+Getting a proposal in earlier will help us ensure that you have sufficient time to either complete the proposed project, or revert to the default option if necessary.  Remember, there is roughly one month to implement your project, and time goes quickly at the end of the semester!
+
+**Note**: the course staff will be less able to assist you with data issues if you take option 2, so please only do this if you're confident about the data and specific application.  We will of course help you with the computational issues as they relate to course material. 
+
+Some ideas for alternative datasets that you might want to investigate:
+
+- The [GHCN climate data](https://www.ncdc.noaa.gov/data-access/land-based-station-data/land-based-datasets/global-historical-climatology-network-ghcn), as used in the Lab 4 assignment.
+- [NYC Taxi Data](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
+- [NIH Open COVID Data](https://datascience.nih.gov/covid-19-open-access-resources)
+
+## What to turn in?
+
+The report should be of a similar format to that of option 1, but please include some additional details to explain the project:
+
+- What is the data, and what is the computational problem being addressed?
+- Which tools and methods did you use for your project, and why did you select them?
+- How are you evaluating your implementation?  What is your criteria for "success"?
+
+We cannot provide a checklist or timeline for this project option, though you may still want to adapt the generic timeline given above for option 1 to stay on track.
+
