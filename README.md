@@ -103,17 +103,25 @@ In addition to all of your code, produce a final report (not to exceed 6 pages),
 Your report should clearly identify the contributions of each member of your group. 
 If any additional software components were required in your project, your choices should be described and well motivated here.  
 
-Include a PDF of your final report through Brightspace, and include a link to your github project in the document.
+Include a PDF of your final report through Brightspace.  Specifically, your final report should include the following details:
 
-Any additional software components should be documented with installation instructions.
+- Link to your group's GitHub repository
+- Documentation of how your train/validation/test splits were generated
+    - Any additional pre-processing of the data that you decide to implement
+- Choice of evaluation criteria
+- Evaluation of popularity baseline on small and full datasets
+- Documentation of latent factor model's hyper-parameters
+- Evaluation of latent factor model on small and full datasets
+- Documentation of extension(s)
 
+Any additional software components that you use should be cited and documented with installation instructions.
 
-## Checklist
+## Timeline
 
 It will be helpful to commit your work in progress to the repository.
-Toward this end, we recommend the following timeline:
+Toward this end, we recommend the following timeline with a preliminary submission on 2022-04-29:
 
 - [ ] 2022/04/22: popularity baseline model and evaluation on small subset.
-- [ ] 2022/04/29: checkpoint submission with baseline results on both small and large datasets.  Preliminary results for matrix factorization on the small dataset.
+- [ ] **2022/04/29**: checkpoint submission with baseline results on both small and large datasets.  Preliminary results for matrix factorization on the small dataset.
 - [ ] 2022/05/06: scale up to the large dataset and develop extensions.
 - [ ] 2022/05/17: final project submission.  **NO EXTENSIONS PAST THIS DATE.**
