@@ -18,56 +18,42 @@ In either case, you are encouraged to work in **groups of up to 3 students**:
 
 ## The data set
 
-In this project, we'll use the [Million Song Dataset](http://millionsongdataset.com/) (MSD) collected by 
-> Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
-> The Million Song Dataset. In Proceedings of the 12th International Society
-> for Music Information Retrieval Conference (ISMIR 2011), 2011.
+In this project, we'll use the [MovieLens](https://grouplens.org/datasets/movielens/latest/) datasets collected by 
+> F. Maxwell Harper and Joseph A. Konstan. 2015. 
+> The MovieLens Datasets: History and Context. 
+> ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. https://doi.org/10.1145/2827872
 
-The MSD consists of (you guessed it) one million songs, with metadata (artist, album, year, etc), tags, partial lyrics content, and derived acoustic features.  You need not use all of these aspects of the data, but they are available.
-The MSD is hosted in NYU's HPC environment under `/scratch/work/courses/DSGA1004-2021/MSD`.
+The data is hosted in NYU's HPC environment under `/scratch/work/courses/DSGA1004-2021/movielens`.
 
-The user interaction data comes from the [Million Song Dataset Challenge](https://www.kaggle.com/c/msdchallenge)
-> McFee, B., Bertin-Mahieux, T., Ellis, D. P., & Lanckriet, G. R. (2012, April).
-> The million song dataset challenge. In Proceedings of the 21st International Conference on World Wide Web (pp. 909-916).
+Two versions of the dataset are provided: a small sample (`ml-latest-small`, 9000 movies and 600 users) and a larger sample (`ml-latest`, 58000 movies and 280000 users).
+Each version of the data contains rating and tag interactions, and the larger sample includes "tag genome" data for each movie, which you may consider as additional features beyond
+the collaborative filter.
+Each version of the data includes a README.txt file which explains the contents and structure of the data which are stored in CSV files.
 
-The interaction data consists of *implicit feedback*: play count data for approximately one million users.
-The interactions have already been partitioned into training, validation, and test sets for you, as described below.
-
-On Peel's HDFS, you will find the following files in `hdfs:/user/bm106/pub/MSD`:
-
-  - `cf_train.parquet`
-  - `cf_validation.parquet`
-  - `cf_test.parquet`
-
-Each of these files contains tuples of `(user_id, count, track_id)`, indicating how many times (if any) a user listened to a specific track.
-For example, the first few rows of `cf_train.parquet` look as follows:
-
-|    | user_id                                  |   count | track_id           |
-|---:|:-----------------------------------------|--------:|:-------------------|
-|  0 | b80344d063b5ccb3212f76538f3d9e43d87dca9e |       1 | TRIQAUQ128F42435AD |
-|  1 | b80344d063b5ccb3212f76538f3d9e43d87dca9e |       1 | TRIRLYL128F42539D1 |
-|  2 | b80344d063b5ccb3212f76538f3d9e43d87dca9e |       2 | TRMHBXZ128F4238406 |
-|  3 | b80344d063b5ccb3212f76538f3d9e43d87dca9e |       1 | TRYQMNI128F147C1C7 |
-|  4 | b80344d063b5ccb3212f76538f3d9e43d87dca9e |       1 | TRAHZNE128F9341B86 |
-
-These files are also available under `/scratch/work/public/MillionSongDataset/` if you want to access them from outside of HDFS.
-
+I strongly recommend to thoroughly read through the dataset documentation before beginning, and make note of the documented differences between the smaller and larger datasets.
+Knowing these differences in advance will save you many headaches when it comes time to scale up.
 
 ## Basic recommender system [80% of grade]
 
-Your recommendation model should use Spark's alternating least squares (ALS) method to learn latent factor representations for users and items.
-Be sure to thoroughly read through the documentation on the [pyspark.ml.recommendation module](https://spark.apache.org/docs/3.0.1/ml-collaborative-filtering.html) before getting started.
+1.  As a first step, you will need to partition the rating data into training, validation, and test samples as discussed in lecture.
+    I recommend writing a script do this in advance, and saving the partitioned data for future use.
+    This will reduce the complexity of your experiment code down the line, and make it easier to generate alternative splits if you want to measure the stability of your
+    implementation.
 
-This model has some hyper-parameters that you should tune to optimize performance on the validation set, notably: 
+2.  Before implementing a sophisticated model, you should begin with a popularity baseline model as discussed in class.
+    This should be simple enough to implement with some basic dataframe computations.
+    Evaluate your popularity baseline (see below) before moving on to the enxt step.
 
-  - the *rank* (dimension) of the latent factors, and
-  - the regularization parameter.
+3.  Your recommendation model should use Spark's alternating least squares (ALS) method to learn latent factor representations for users and items.
+    Be sure to thoroughly read through the documentation on the [pyspark.ml.recommendation module](https://spark.apache.org/docs/3.0.1/ml-collaborative-filtering.html) before getting started.
+    This model has some hyper-parameters that you should tune to optimize performance on the validation set, notably: 
+      - the *rank* (dimension) of the latent factors, and
+      - the regularization parameter.
 
 ### Evaluation
 
-Once your model is trained, you will need to evaluate its accuracy on the validation and test data.
-Scores for validation and test should both be reported in your final writeup.
-Once your model is trained, evaluate it on the test set.
+Once you are able to make predictions—either from the popularity baseline or the latent factor model—you will need to evaluate accuracy on the validation and test data.
+Scores for validation and test should both be reported in your write-up.
 Evaluations should be based on predictions of the top 100 items for each user, and report the ranking metrics provided by spark.
 Refer to the [ranking metrics](https://spark.apache.org/docs/3.0.1/mllib-evaluation-metrics.html#ranking-systems) section of the Spark documentation for more details.
 
@@ -85,7 +71,10 @@ If you do this, be careful that your downsampled data includes enough users from
 
 ### Using the cluster
 
-Please be considerate of your fellow classmates!  The Peel cluster is a limited, shared resource.  Make sure that your code is properly implemented and works efficiently.  If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
+Please be considerate of your fellow classmates!
+The Peel cluster is a limited, shared resource. 
+Make sure that your code is properly implemented and works efficiently. 
+If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
 
 Concretely, this means that it will be helpful for you to have a working pipeline that operates on progressively larger sub-samples of the training data.
 We suggest building sub-samples of 1%, 5%, and 25% of the data, and then running the entire set of experiments end-to-end on each sample before attempting the entire dataset.
@@ -106,6 +95,7 @@ The choice of extension is up to you, but here are some ideas:
   - *Cold-start*: using supplementary metadata (tags, genres, etc), build a model that can map observable data to the learned latent factor representation for items.  To evaluate its accuracy, simulate a cold-start scenario by holding out a subset of items during training (of the recommender model), and compare its performance to a full collaborative filter model.  *Hint:* you may want to use dask for this.
   - *Exploration*: use the learned representation to develop a visualization of the items and users, e.g., using T-SNE or UMAP.  The visualization should somehow integrate additional information (features, metadata, or genre tags) to illustrate how items are distributed in the learned space.
 
+Other extension ideas are welcome as well, but please check with the instructional staff before proceeding.
 
 ## What to turn in
 
@@ -113,14 +103,15 @@ In addition to all of your code, produce a final report (not to exceed 6 pages),
 Your report should clearly identify the contributions of each member of your group. 
 If any additional software components were required in your project, your choices should be described and well motivated here.  
 
-Include a PDF of your final report through Brightspace, and include a link to your github project.
+Include a PDF of your final report through Brightspace, and include a link to your github project in the document.
 
 Any additional software components should be documented with installation instructions.
 
 
 ## Checklist
 
-It will be helpful to commit your work in progress to the repository.  Toward this end, we recommend the following timeline:
+It will be helpful to commit your work in progress to the repository.
+Toward this end, we recommend the following timeline:
 
 - [ ] 2022/04/22: popularity baseline model and evaluation on small subset.
 - [ ] 2022/04/29: checkpoint submission with baseline results on both small and large datasets.  Preliminary results for matrix factorization on the small dataset.
