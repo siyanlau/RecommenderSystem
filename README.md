@@ -62,12 +62,6 @@ As a general rule, you should explore ranges of each hyper-parameter that are su
 
 If you like, you may also use additional software implementations of recommendation or ranking metric evaluations, but be sure to cite any additional software you use in the project.
 
-### Hints
-
-Start small, and get the entire system working start-to-finish before investing time in hyper-parameter tuning!
-To avoid over-loading the cluster, I recommend downsampling the training data first to develop a prototype before going to the full dataset.
-If you do this, be careful that your downsampled data includes enough users from the validation set to test your model.
-
 
 ### Using the cluster
 
@@ -75,12 +69,6 @@ Please be considerate of your fellow classmates!
 The Peel cluster is a limited, shared resource. 
 Make sure that your code is properly implemented and works efficiently. 
 If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
-
-Concretely, this means that it will be helpful for you to have a working pipeline that operates on progressively larger sub-samples of the training data.
-We suggest building sub-samples of 1%, 5%, and 25% of the data, and then running the entire set of experiments end-to-end on each sample before attempting the entire dataset.
-This will help you make efficient progress and debug your implementation, while still allowing other students to use the cluster effectively.
-If for any reason you are unable to run on the full dataset, you should report your partial results obtained on the smaller sub-samples.
-Any sub-sampling should be performed prior to generating train/validation/test splits.
 
 
 ## Extensions [20% of grade]
@@ -93,7 +81,10 @@ The choice of extension is up to you, but here are some ideas:
   - *Comparison to single-machine implementations*: compare Spark's parallel ALS model to a single-machine implementation, e.g. [lightfm](https://github.com/lyst/lightfm) or [lenskit](https://github.com/lenskit/lkpy).  Your comparison should measure both efficiency (model fitting time as a function of data set size) and resulting accuracy.
   - *Fast search*: use a spatial data structure (e.g., LSH or partition trees) to implement accelerated search at query time.  For this, it is best to use an existing library such as [annoy](https://github.com/spotify/annoy), [nmslib](https://github.com/nmslib/nmslib), or [scann](https://github.com/google-research/google-research/tree/master/scann) and you will need to export the model parameters from Spark to work in your chosen environment.  For full credit, you should provide a thorough evaluation of the efficiency gains provided by your spatial data structure over a brute-force search method.
   - *Cold-start*: using supplementary metadata (tags, genres, etc), build a model that can map observable data to the learned latent factor representation for items.  To evaluate its accuracy, simulate a cold-start scenario by holding out a subset of items during training (of the recommender model), and compare its performance to a full collaborative filter model.  *Hint:* you may want to use dask for this.
-  - *Exploration*: use the learned representation to develop a visualization of the items and users, e.g., using T-SNE or UMAP.  The visualization should somehow integrate additional information (features, metadata, or genre tags) to illustrate how items are distributed in the learned space.
+  - *Qualitative error analysis*: using your best-performing latent factor model, investigate the mistakes that it makes.  This can be done in a number of ways, including (but not limited to):
+    - investigating the trends and genres of the users who produce the lowest-scoring predictions
+    - visualizing the learned item representation via dimensionality reduction techniques (e.g. T-SNE or UMAP) with additional data for color-coding (genre tags, popularity, etc)
+    - clustering users by their learned representations and identifying common trends in each cluster's consumption behavior
 
 Other extension ideas are welcome as well, but please check with the instructional staff before proceeding.
 
