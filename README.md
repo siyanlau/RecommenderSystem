@@ -100,7 +100,8 @@ Any additional software components that you use should be cited and documented w
 It will be helpful to commit your work in progress to the repository.
 Toward this end, we recommend the following timeline with a preliminary submission on 2022-04-29:
 
-- [ ] 2023/04/21: train/validation partitioning, popularity baseline model, and evaluation module.
-- [ ] **2023/04/28**: checkpoint submission with baseline results.  Preliminary results for matrix factorization on a sub-sample of the data.
-- [ ] 2023/05/05: scale up to the full dataset and develop extensions.
+- [ ] 2023/04/21: data pre-processing, train/validation partitioning, popularity baseline model.
+- [ ] **2023/04/28**: evaluation, checkpoint submission with baseline results.
+- [ ] 2023/05/05: Working latent factor model implementation on subsample of training data.
+- [ ] 2023/05/12: Scale up to the full dataset and develop extensions.
 - [ ] 2023/05/16: final project submission.  **NO EXTENSIONS PAST THIS DATE.**
