@@ -20,16 +20,17 @@ In either case, you are encouraged to work in **groups of up to 3 students**:
 
 ## The data set
 
-In this project, we'll use the [ListenBrainz](https://listenbrainz.org/) dataset, which we have mirrored for you in NYU's HPC environment under `/scratch/work/courses/DSGA1004-2021/listenbrainz`.
+In this project, we'll use the [ListenBrainz](https://listenbrainz.org/) dataset, which we have prepared for you in Dataproc's HDFS at `/user/bm106_nyu_edu/1004-project-2023/`.
 This data consists of *implicit feedback* from music listening behavior, spanning several thousand users and tens of millions of songs.
 **Note**: this is real data.  It may contain offensive language (e.g. in song titles or artist names).  It is entirely possible to complete the assignment using only the interaction data and ID fields without investigating metadata.
 
 
 ## Basic recommender system [80% of grade]
 
-1.  As a first step, you will need to partition the rating data into training and validation samples as discussed in lecture.
+1.  As a first step, you will need to partition the interaction data into training and validation samples as discussed in lecture.
     I recommend writing a script do this in advance, and saving the partitioned data for future use.
     This will reduce the complexity of your experiment code down the line, and make it easier to generate alternative splits if you want to measure the stability of your implementation.
+    You will also need to aggregate repeated interaction events into count data.
 
 2.  Before implementing a sophisticated model, you begin with a popularity baseline model as discussed in class.
     This should be simple enough to implement with some basic dataframe computations, and should be optimized to perform as well as possible on your validation set.
@@ -72,7 +73,7 @@ Again, if you're working in a group of 3, you must implement two extensions for 
 The choice of extension is up to you, but here are some ideas:
 
   - *Comparison to single-machine implementations*: compare Spark's parallel ALS model to a single-machine implementation, e.g. [lightfm](https://github.com/lyst/lightfm) or [lenskit](https://github.com/lenskit/lkpy).  Your comparison should measure both efficiency (model fitting time as a function of data set size) and resulting accuracy.
-  - *Fast search*: use a spatial data structure (e.g., LSH or partition trees) to implement accelerated search at query time.  For this, it is best to use an existing library such as [annoy](https://github.com/spotify/annoy), [nmslib](https://github.com/nmslib/nmslib), or [scann](https://github.com/google-research/google-research/tree/master/scann) and you will need to export the model parameters from Spark to work in your chosen environment.  For full credit, you should provide a thorough evaluation of the efficiency gains provided by your spatial data structure over a brute-force search method.
+  - *Fast search*: use a spatial data structure (e.g., LSH or partition trees) to implement accelerated search at query time.  For this, it is best to use an existing library such as [annoy](https://github.com/spotify/annoy), [nmslib](https://github.com/nmslib/nmslib), or [scann](https://github.com/google-research/google-research/tree/master/scann) and you will need to export the model parameters from Spark to work in your chosen environment.  For full credit, you should provide a thorough evaluation of the efficiency gains provided by your spatial data structure over a brute-force search method, as well as any changes in accuracy induced by the approximate search.
   
 Other extension ideas are welcome as well, but must be approved in advance by the instructional staff.
 
@@ -85,12 +86,11 @@ If any additional software components were required in your project, your choice
 Include a PDF of your final report through Brightspace.  Specifically, your final report should include the following details:
 
 - Link to your group's GitHub repository
-- Documentation of how your train/validation/test splits were generated
+- Documentation of how your train/validation splits were generated
     - Any additional pre-processing of the data that you decide to implement
-- Choice of evaluation criteria
-- Evaluation of popularity baseline on small and full datasets
-- Documentation of latent factor model's hyper-parameters
-- Evaluation of latent factor model on small and full datasets
+- Evaluation of popularity baseline
+- Documentation of latent factor model's hyper-parameters and validation
+- Evaluation of latent factor model
 - Documentation of extension(s)
 
 Any additional software components that you use should be cited and documented with installation instructions.
