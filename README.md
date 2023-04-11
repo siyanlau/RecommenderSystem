@@ -98,7 +98,7 @@ Any additional software components that you use should be cited and documented w
 ## Timeline
 
 It will be helpful to commit your work in progress to the repository.
-Toward this end, we recommend the following timeline with a preliminary submission on 2022-04-29:
+Toward this end, we recommend the following timeline to stay on track:
 
 - [ ] 2023/04/21: data pre-processing, train/validation partitioning, popularity baseline model.
 - [ ] **2023/04/28**: evaluation, checkpoint submission with baseline results.
