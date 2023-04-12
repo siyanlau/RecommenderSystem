@@ -66,7 +66,7 @@ The Dataproc cluster is a limited, shared resource.
 Make sure that your code is properly implemented and works efficiently. 
 If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
 
-**NOTE**: At the time the project is released (2023-04-12), the version of Parquet currently installed on Dataproc has a known issue with reading large parquet files.  As a temporary workaround, we have provided a reduced training set (`*_train_small.parquet`) for you to work with until Dataproc is updated to support the full data file.
+**NOTE**: At the time the project is released (2023-04-12), the version of Parquet currently installed on Dataproc has a known issue with reading large parquet files.  It should not cause any problems here, but just in case it does, we have provided a reduced training set (`*_train_small.parquet`) for you to work with.
 
 
 ## Extensions [20% of grade]
