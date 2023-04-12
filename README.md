@@ -23,6 +23,7 @@ In either case, you are encouraged to work in **groups of up to 3 students**:
 In this project, we'll use the [ListenBrainz](https://listenbrainz.org/) dataset, which we have prepared for you in Dataproc's HDFS at `/user/bm106_nyu_edu/1004-project-2023/`.  A copy is also available on the Greene cluster at `/scratch/work/courses/DSGA1004-2021/listenbrainz/`.
 
 This data consists of *implicit feedback* from music listening behavior, spanning several thousand users and tens of millions of songs.
+Each observation consists of a single interaction between a user and a song.
 **Note**: this is real data.  It may contain offensive language (e.g. in song titles or artist names).  It is entirely possible to complete the assignment using only the interaction data and ID fields without investigating metadata.
 
 
@@ -64,6 +65,8 @@ Please be considerate of your fellow classmates!
 The Dataproc cluster is a limited, shared resource. 
 Make sure that your code is properly implemented and works efficiently. 
 If too many people run inefficient code simultaneously, it can slow down the entire cluster for everyone.
+
+**NOTE**: At the time the project is released (2023-04-12), the version of Parquet currently installed on Dataproc has a known issue with reading large parquet files.  As a temporary workaround, we have provided a reduced training set (`*_train_small.parquet`) for you to work with until Dataproc is updated to support the full data file.
 
 
 ## Extensions [20% of grade]
