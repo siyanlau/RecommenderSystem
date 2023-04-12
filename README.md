@@ -20,7 +20,8 @@ In either case, you are encouraged to work in **groups of up to 3 students**:
 
 ## The data set
 
-In this project, we'll use the [ListenBrainz](https://listenbrainz.org/) dataset, which we have prepared for you in Dataproc's HDFS at `/user/bm106_nyu_edu/1004-project-2023/`.
+In this project, we'll use the [ListenBrainz](https://listenbrainz.org/) dataset, which we have prepared for you in Dataproc's HDFS at `/user/bm106_nyu_edu/1004-project-2023/`.  A copy is also available on the Greene cluster at `/scratch/work/courses/DSGA1004-2021/listenbrainz/`.
+
 This data consists of *implicit feedback* from music listening behavior, spanning several thousand users and tens of millions of songs.
 **Note**: this is real data.  It may contain offensive language (e.g. in song titles or artist names).  It is entirely possible to complete the assignment using only the interaction data and ID fields without investigating metadata.
 
@@ -30,7 +31,7 @@ This data consists of *implicit feedback* from music listening behavior, spannin
 1.  As a first step, you will need to partition the interaction data into training and validation samples as discussed in lecture.
     I recommend writing a script do this in advance, and saving the partitioned data for future use.
     This will reduce the complexity of your experiment code down the line, and make it easier to generate alternative splits if you want to measure the stability of your implementation.
-    You will also need to aggregate repeated interaction events into count data.
+    You will also need to aggregate the individually observed interaction events into count data.
 
 2.  Before implementing a sophisticated model, you begin with a popularity baseline model as discussed in class.
     This should be simple enough to implement with some basic dataframe computations, and should be optimized to perform as well as possible on your validation set.
