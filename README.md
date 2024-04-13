@@ -30,10 +30,12 @@ We strongly recommend to thoroughly read through the dataset documentation befor
 Knowing these differences in advance will save you many headaches when it comes time to scale up.
 Note: In general, use the small dataset for prototyping, but answer the questions below by using the full dataset.
 Also note that these files are provided to you as zip files for ease - they both unzip as larger folders with many files. You should copy these files to your local hdfs and unzip them there by commands like these:
-hadoop fs -cp /user/pw44_nyu_edu/ml-latest.zip
-hadoop fs -copyToLocal /user/pw44_nyu_edu/ml-latest.zip
+
+hadoop fs -copyToLocal /user/pw44_nyu_edu/ml-latest.zip .
+
 unzip ml-latest.zip
-hadoop fs -copyFromLocal ./unzipped_folder /user/pw44_nyu_edu/unzipped_folder
+
+hadoop fs -copyFromLocal ./ml-latest /user/[YOUR_NETID]_nyu_edu/target
 
 
 ## What we would like you to build / do (all 5 deliverables are equally weighed)
