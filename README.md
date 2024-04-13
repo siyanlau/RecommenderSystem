@@ -1,22 +1,19 @@
 # DSGA1004 - BIG DATA
 ## Final project
 
-*Handout date*: 2023-04-12
+*Handout date*: 2024-04-12
 
 *Checkpoint submission*: 2023-04-28
 
-*Submission deadline*: 2023-05-16
+*Submission deadline*: 2023-05-14 
 
 
 # Overview
 
 In the final project, you will apply the tools you have learned in this class to solve a realistic, large-scale applied problem.
-Specifically, you will build and evaluate a collaborative-filter based recommender system. 
+Specifically, you will build and evaluate a collaborative-filter based recommender and customer segmentation system. 
 
 In either case, you are encouraged to work in **groups of up to 3 students**:
-
-- Groups of 1--2 will need to implement one extension (described below) over the baseline project for full credit.
-- Groups of 3 will need to implement two extensions for full credit.
 
 ## The data set
 
@@ -108,4 +105,4 @@ Toward this end, we recommend the following timeline to stay on track:
 - [ ] **2023/04/28**: evaluation, checkpoint submission with baseline results.
 - [ ] 2023/05/05: Working latent factor model implementation on subsample of training data.
 - [ ] 2023/05/12: Scale up to the full dataset and develop extensions.
-- [ ] 2023/05/16: final project submission.  **NO EXTENSIONS PAST THIS DATE.**
+- [ ] 2023/05/14: final project submission.  **NO EXTENSIONS PAST THIS DATE.** [this is the last day of the semester, 05/15 is commencement]
