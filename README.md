@@ -22,7 +22,7 @@ In this project, we'll use the [MovieLens](https://grouplens.org/datasets/moviel
 
 We have prepared two versions of this dataset for you in Dataproc's HDFS: 
 A small dataset for prototyping at /user/pw44_nyu_edu/ml-latest-small.zip (9000 movies, 600 users)
-The full dataset for scaling up at /user/pw44_nyu_edu/ml-latest.zip (58000 movies and 280000 users)
+The full dataset for scaling up at /user/pw44_nyu_edu/ml-latest.zip (86000 movies and 330000 users)
 
 Each version of the data contains rating and tag interactions, and the larger sample includes "tag genome" data for each movie, which you may consider as additional features beyond
 the collaborative filter. Each version of the data includes a README.txt file which explains the contents and structure of the data which are stored in CSV files.
