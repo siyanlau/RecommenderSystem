@@ -5,9 +5,11 @@ from pyspark.sql.functions import col, lit, when
 import pandas as pd
 
 # Initialize SparkSession
-spark = SparkSession.builder \
-    .appName("MovieTwin") \
-    .getOrCreate()
+# spark = SparkSession.builder \
+#     .appName("MovieTwin") \
+#     .getOrCreate()
+    
+spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "10").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
 
 # Load only the movieId
 movies = spark.read.csv("ml-latest/movies.csv", header=True, inferSchema=True, schema="movieId INT")
@@ -15,7 +17,7 @@ movies = spark.read.csv("ml-latest/movies.csv", header=True, inferSchema=True, s
 # Load only the userId and movieId columns
 # By loading in only the relevant data, we reduce loading time to 1/20!
 ratings = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
-
+ratings = ratings.repartition(10)
 # set variables from documentation - avoid some unnecessary data loading
 # the number have been verified by loading the actual datasets
 
@@ -77,5 +79,5 @@ loaded_data = load_data(ratings, movies)
 
 loaded_data.head(10)
 
-test = spark.createDataFrame(loaded_data.head(5))
-test.show()
+# test = spark.createDataFrame(loaded_data.head(5))
+# test.show()
