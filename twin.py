@@ -81,7 +81,7 @@ num_partitions = loaded_data.rdd.getNumPartitions()
 
 print("Number of partitions:", num_partitions)
 
-loaded_data.head(5)
+loaded_data.head(1)
 
 # test = spark.createDataFrame(loaded_data.head(5))
 # test.show()
