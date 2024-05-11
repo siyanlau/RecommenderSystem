@@ -1,34 +1,73 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import collect_set
-from pyspark.sql import functions as F
+from pyspark.sql import functions
+from pyspark.sql.functions import col, lit, when
+import pandas as pd
 
 # Initialize SparkSession
 spark = SparkSession.builder \
     .appName("MovieTwin") \
     .getOrCreate()
 
-# Load ratings data
-ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True)
+# Load only the movieId
+movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
 
-ratings.show(20)
+# Load only the userId and movieId columns
+# By loading in only the relevant data, we reduce loading time to 1/20!
+ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
 
-# # Group ratings data by user ID to get the set of movies rated by each user
-# user_movies = ratings.groupBy('userId').agg(F.collect_set('movieId').alias('movies'))
+# set variables from documentation - avoid some unnecessary data loading
+# the number have been verified by loading the actual datasets
 
-# # Cartesian join to compute all user pairs
-# user_pairs = user_movies.alias('u1').crossJoin(user_movies.alias('u2'))
+num_movies = 9742 
+num_users = 610
 
-# # Filter out duplicate pairs and self-joins
-# user_pairs = user_pairs.filter('u1.userId < u2.userId')
+def group_ratings_by_user(ratings):
+    user_movies = {}
+    current_user = None
+    current_movies = []
+    for row in ratings.collect():
+        user_id = row['userId']
+        movie_id = row['movieId']
+        if user_id != current_user:
+            if current_user is not None:
+                user_movies[current_user] = current_movies
+            current_user = user_id
+            current_movies = [movie_id]
+        else:
+            current_movies.append(movie_id)
+    if current_user is not None:
+        user_movies[current_user] = current_movies
+    return user_movies
 
-# # Compute Jaccard similarity coefficient between sets of rated movies
-# user_pairs = user_pairs.withColumn('jaccard', F.size(F.array_intersect('u1.movies', 'u2.movies')) / F.size(F.array_union('u1.movies', 'u2.movies')))
 
-# # Identify top 100 pairs with highest Jaccard similarity coefficient
-# top_100_pairs = user_pairs.orderBy(F.desc('jaccard')).limit(100)
+def load_data(ratings, movies):
+  # create an empty dataframe which we later fill with ones
+  user_movie_empty = pd.DataFrame(0, index=range(1, num_users + 1), columns=range(1, num_movies + 1))
 
-# # Output top 100 pairs of similar users
-# top_100_pairs.show()
+  # create a movieId to movieIndex (0-inedxed) mapping 
+  distinct_movie_ids = sorted(set(row.movieId for row in movies.collect()))
+  movie_id_index_map = {movie_id: index for index, movie_id in enumerate(distinct_movie_ids)} # index starts from zero
 
-# Stop SparkSession
+  # create a dataframe representing the list of movies watched by each user
+  user_movies = group_ratings_by_user(ratings)
+  user_movies_df = spark.createDataFrame([(user_id, movies) for user_id, movies in user_movies.items()], ['userId', 'movies'])
+
+  # For each user, iterate over their list of movies and set the corresponding column to 1
+  for i, row in enumerate(user_movies_df.collect()):
+    for movieId in row['movies']:
+      position = movie_id_index_map[movieId]
+      user_movie_empty.iloc[i, position] = 1
+
+  return user_movie_empty
+
+
+loaded_data = load_data(ratings, movies)
+
+loaded_data.head(10)
+
+# this function exploits the fact that ratings are sorted by userID already
+# to find the set of movies rated by each user, we loop throught the rows until a different userID occurs.
+
+
 spark.stop()
