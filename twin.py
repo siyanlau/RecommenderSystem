@@ -9,7 +9,7 @@ import pandas as pd
 #     .appName("MovieTwin") \
 #     .getOrCreate()
     
-spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "10").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
+spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "20").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
 
 # Load only the movieId
 movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
