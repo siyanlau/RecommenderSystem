@@ -8,7 +8,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # Load ratings data
-ratings = spark.read.csv("ratings.csv", header=True, inferSchema=True)
+ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True)
 
 ratings.show(20)
 
