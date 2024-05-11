@@ -85,3 +85,5 @@ loaded_data.head(5)
 
 # test = spark.createDataFrame(loaded_data.head(5))
 # test.show()
+
+spark.stop()
