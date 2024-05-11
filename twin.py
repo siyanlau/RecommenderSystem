@@ -12,20 +12,20 @@ import pandas as pd
 spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "20").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
 
 # Load only the movieId
-movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
+movies = spark.read.csv("ml-latest/movies.csv", header=True, inferSchema=True, schema="movieId INT")
 
 # Load only the userId and movieId columns
 # By loading in only the relevant data, we reduce loading time to 1/20!
-ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
+ratings = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
 ratings = ratings.repartition(10)
 # set variables from documentation - avoid some unnecessary data loading
 # the number have been verified by loading the actual datasets
 
-num_movies = 9742 
-num_users = 610
+# num_movies = 9742 
+# num_users = 610
 
-# num_movies = 86537
-# num_users = 330975
+num_movies = 86537
+num_users = 330975
 
 ratings.show(10)
 print("haha!")
@@ -81,7 +81,15 @@ num_partitions = loaded_data.rdd.getNumPartitions()
 
 print("Number of partitions:", num_partitions)
 
-loaded_data.head(1)
+num_rows = loaded_data.count()
+
+# Check the number of columns
+num_cols = len(loaded_data.columns)
+
+print("Number of rows:", num_rows)
+print("Number of columns:", num_cols)
+
+# loaded_data.head(1)
 
 # test = spark.createDataFrame(loaded_data.head(5))
 # test.show()
