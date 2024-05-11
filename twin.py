@@ -66,8 +66,9 @@ loaded_data = load_data(ratings, movies)
 
 loaded_data.head(10)
 
+test = spark.createDataFrame(loaded_data.head(5))
+test.show()
+
 # this function exploits the fact that ratings are sorted by userID already
 # to find the set of movies rated by each user, we loop throught the rows until a different userID occurs.
 
-
-spark.stop()
