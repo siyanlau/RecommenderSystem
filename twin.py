@@ -77,7 +77,7 @@ def sparse_vector_from_movies(movies, movie_id_index_map):
 
 loaded_data = load_data(ratings, movies)
 
-loaded_data.head(10)
+loaded_data.head(1)
 
 # test = spark.createDataFrame(loaded_data.head(5))
 # test.show()
