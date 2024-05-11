@@ -47,25 +47,30 @@ def group_ratings_by_user(ratings):
     return user_movies
 
 
+from pyspark.ml.linalg import Vectors
+
 def load_data(ratings, movies):
-  # create an empty dataframe which we later fill with ones
-  user_movie_empty = pd.DataFrame(0, index=range(1, num_users + 1), columns=range(1, num_movies + 1))
+    # create a movieId to movieIndex (0-indexed) mapping
+    distinct_movie_ids = sorted(set(row.movieId for row in movies.collect()))
+    movie_id_index_map = {movie_id: index for index, movie_id in enumerate(distinct_movie_ids)}
 
-  # create a movieId to movieIndex (0-inedxed) mapping 
-  distinct_movie_ids = sorted(set(row.movieId for row in movies.collect()))
-  movie_id_index_map = {movie_id: index for index, movie_id in enumerate(distinct_movie_ids)} # index starts from zero
+    # create a dataframe representing the list of movies watched by each user
+    user_movies = group_ratings_by_user(ratings)
+    user_movies_df = spark.createDataFrame([(user_id, movies) for user_id, movies in user_movies.items()], ['userId', 'movies'])
 
-  # create a dataframe representing the list of movies watched by each user
-  user_movies = group_ratings_by_user(ratings)
-  user_movies_df = spark.createDataFrame([(user_id, movies) for user_id, movies in user_movies.items()], ['userId', 'movies'])
+    # Convert user-movie mapping to sparse vectors
+    user_movie_sparse_vectors = user_movies_df.rdd.map(lambda row: (row.userId, sparse_vector_from_movies(row.movies, movie_id_index_map)))
 
-  # For each user, iterate over their list of movies and set the corresponding column to 1
-  for i, row in enumerate(user_movies_df.collect()):
-    for movieId in row['movies']:
-      position = movie_id_index_map[movieId]
-      user_movie_empty.iloc[i, position] = 1
+    # Convert RDD to DataFrame
+    user_movie_sparse_vectors = user_movie_sparse_vectors.toDF(['userId', 'movieVector'])
+    
+    return user_movie_sparse_vectors
 
-  return user_movie_empty
+
+def sparse_vector_from_movies(movies, movie_id_index_map):
+    indices = [movie_id_index_map[movieId] for movieId in movies]
+    values = [1] * len(indices)  # Assuming all entries are 1
+    return Vectors.sparse(num_movies, indices, values)
 
 
 loaded_data = load_data(ratings, movies)
