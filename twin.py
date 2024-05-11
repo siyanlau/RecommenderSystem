@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import collect_set
+from pyspark.sql.functions import collect_set, collect_list
 from pyspark.sql import functions
-from pyspark.sql.functions import col, lit, when
 import pandas as pd
 
 # Initialize SparkSession
@@ -12,40 +11,27 @@ import pandas as pd
 spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "20").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
 
 # Load only the movieId
-movies = spark.read.csv("ml-latest/movies.csv", header=True, inferSchema=True, schema="movieId INT")
+movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
 
 # Load only the userId and movieId columns
 # By loading in only the relevant data, we reduce loading time to 1/20!
-ratings = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
+ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
 ratings = ratings.repartition(10)
 # set variables from documentation - avoid some unnecessary data loading
 # the number have been verified by loading the actual datasets
 
-# num_movies = 9742 
-# num_users = 610
+num_movies = 9742 
+num_users = 610
 
-num_movies = 86537
-num_users = 330975
+# num_movies = 86537
+# num_users = 330975
 
 ratings.show(10)
 print("haha!")
 
 def group_ratings_by_user(ratings):
-    user_movies = {}
-    current_user = None
-    current_movies = []
-    for row in ratings.collect():
-        user_id = row['userId']
-        movie_id = row['movieId']
-        if user_id != current_user:
-            if current_user is not None:
-                user_movies[current_user] = current_movies
-            current_user = user_id
-            current_movies = [movie_id]
-        else:
-            current_movies.append(movie_id)
-    if current_user is not None:
-        user_movies[current_user] = current_movies
+    user_movies_df = ratings.groupBy('userId').agg(collect_list('movieId').alias('movies'))
+    user_movies = {row.userId: row.movies for row in user_movies_df.collect()}
     return user_movies
 
 
