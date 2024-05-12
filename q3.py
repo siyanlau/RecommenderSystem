@@ -18,13 +18,19 @@ from pyspark.sql import functions as F
 import random
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, ArrayType
 from pyspark.sql.functions import udf, col
+import sys
 
 # Initialize Spark session
 spark = SparkSession.builder \
     .appName("ALS Recommendation System") \
     .getOrCreate()
+if len(sys.argv) < 2:
+    arg = "big"
+arg = sys.argv[1]
 
-data = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT, rating FLOAT")
+path = "ml-latest-small/ratings.csv" if arg == "small" else "ml-latest/ratings.csv"
+
+data = spark.read.csv(path, header=True, inferSchema=True, schema="userId INT, movieId INT, rating FLOAT")
 data.show()
 
 train_ratio = 0.7
@@ -96,6 +102,6 @@ print(type(train_data))
 num_rows = train_data.count()
 print("Length of train_data:", num_rows)
 
-# first_row = train_data.select('train_data').first()
-# num_elements = len(first_row[0])
+first_row = train_data.select('train_data').first()
+num_elements = len(first_row[0])
 # print("Length of train_data[0]", num_elements)
