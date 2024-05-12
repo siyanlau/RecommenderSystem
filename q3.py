@@ -104,4 +104,4 @@ print("Length of train_data:", num_rows)
 
 first_row = train_data.select('train_data').first()
 num_elements = len(first_row[0])
-# print("Length of train_data[0]", num_elements)
+print("Length of train_data[0]", num_elements)
