@@ -40,6 +40,7 @@ def partition_ratings(user_id, ratings_list):
 
     # Generate random indices for each set
     indices = list(range(total_ratings))
+    random.seed(42)
     random.shuffle(indices)
     train_indices = indices[:train_count]
     validation_indices = indices[train_count:train_count + validation_count]
