@@ -2,13 +2,14 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import collect_set, collect_list
 from pyspark.sql import functions
 import pandas as pd
+from pyspark.ml.linalg import Vectors
 
 # Initialize SparkSession
 # spark = SparkSession.builder \
 #     .appName("MovieTwin") \
 #     .getOrCreate()
     
-spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "20").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
+spark = SparkSession.builder.appName("MovieTwin").config("spark.executor.instances", "5").config("spark.executor.memory", "4g").config("spark.executor.cores", "2").getOrCreate()
 
 # Load only the movieId
 movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
@@ -35,8 +36,6 @@ def group_ratings_by_user(ratings):
     return user_movies
 
 
-from pyspark.ml.linalg import Vectors
-
 def load_data(ratings, movies):
     # create a movieId to movieIndex (0-indexed) mapping
     distinct_movie_ids = sorted(set(row.movieId for row in movies.collect()))
@@ -53,7 +52,6 @@ def load_data(ratings, movies):
     user_movie_sparse_vectors = user_movie_sparse_vectors.toDF(['userId', 'movieVector'])
     
     return user_movie_sparse_vectors
-
 
 def sparse_vector_from_movies(movies, movie_id_index_map):
     indices = [movie_id_index_map[movieId] for movieId in movies]
