@@ -24,7 +24,7 @@ spark = SparkSession.builder \
     .appName("ALS Recommendation System") \
     .getOrCreate()
 
-data = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT, rating FLOAT")
+data = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT, rating FLOAT")
 data.show()
 
 train_ratio = 0.7
