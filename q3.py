@@ -91,9 +91,11 @@ def train_val_test_split(data):
 
 train_data, test_data, validation_data = train_val_test_split(data)
 
+print(type(train_data))
+
 num_rows = train_data.count()
 print("Length of train_data:", num_rows)
 
-first_row = train_data.select('train_data').first()
-num_elements = len(first_row[0])
-print("Length of train_data[0]", num_elements)
+# first_row = train_data.select('train_data').first()
+# num_elements = len(first_row[0])
+# print("Length of train_data[0]", num_elements)
