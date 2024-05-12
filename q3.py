@@ -17,7 +17,7 @@ from pyspark.mllib.recommendation import ALS, Rating
 from pyspark.sql import functions as F
 import random
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, ArrayType
-from pyspark.sql.functions import udf, col
+from pyspark.sql.functions import udf, col, sum, explode
 import sys
 
 # Initialize Spark session
@@ -86,14 +86,24 @@ def train_val_test_split(data):
   # UDF to apply partition_ratings function to each row of the DataFrame
   partition_udf = udf(lambda user_id, ratings_list: partition_ratings(user_id, ratings_list), schema)
 
+  # This will be cleaned by garbage collector after the function returns
   partitioned_ratings_df = grouped_ratings.withColumn('partitioned_data', partition_udf(col('userId'), col('ratings')))
 
   # Extract the three partitions into separate columns
-  train_data = partitioned_ratings_df.selectExpr("partitioned_data['train'] AS train_data")
-  test_data = partitioned_ratings_df.selectExpr("partitioned_data['test'] AS test_data")
-  validation_data = partitioned_ratings_df.selectExpr("partitioned_data['validation'] AS validation_data")
+  train_data = partitioned_ratings_df.selectExpr("partitioned_data['train'] AS train_data").withColumn("exploded", explode('train_data')).drop('train_data').select(col('exploded.userId').alias('userId'),
+                                     col('exploded.movieId').alias('movieId'),
+                                     col('exploded.rating').alias('rating'))
+  
+  test_data = partitioned_ratings_df.selectExpr("partitioned_data['test'] AS test_data").withColumn("exploded", explode('test_data')).drop('test_data').select(col('exploded.userId').alias('userId'),
+                                     col('exploded.movieId').alias('movieId'),
+                                     col('exploded.rating').alias('rating'))
+  
+  validation_data = partitioned_ratings_df.selectExpr("partitioned_data['validation'] AS validation_data").withColumn("exploded", explode('validation_data')).drop('validation_data').select(col('exploded.userId').alias('userId'),
+                                     col('exploded.movieId').alias('movieId'),
+                                     col('exploded.rating').alias('rating'))
 
   return train_data, test_data, validation_data
+
 
 train_data, test_data, validation_data = train_val_test_split(data)
 
@@ -102,6 +112,8 @@ print(type(train_data))
 num_rows = train_data.count()
 print("Length of train_data:", num_rows)
 
-first_row = train_data.select('train_data').first()
-num_elements = len(first_row[0])
-print("Length of train_data[0]", num_elements)
+# first_row = train_data.select('train_data').first()
+# num_elements = len(first_row[0])
+# print("Length of train_data[0]", num_elements)
+
+train_data.show(10)
