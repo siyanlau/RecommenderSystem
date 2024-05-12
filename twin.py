@@ -25,11 +25,11 @@ spark = SparkSession.builder \
 
 # Commented out IPython magic to ensure Python compatibility.
 # Load only the movieId
-movies = spark.read.csv("movies.csv", header=True, inferSchema=True, schema="movieId INT")
+movies = spark.read.csv("ml-latest-small/movies.csv", header=True, inferSchema=True, schema="movieId INT")
 
 # Load only the userId and movieId columns
 # By loading in only the relevant data, we reduce loading time to 1/20!
-ratings = spark.read.csv("ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
+ratings = spark.read.csv("ml-latest-small/ratings.csv", header=True, inferSchema=True, schema="userId INT, movieId INT")
 
 # set variables from documentation - avoid some unnecessary data loading
 # the number have been verified by loading the actual datasets
