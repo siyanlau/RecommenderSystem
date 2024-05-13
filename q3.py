@@ -17,7 +17,7 @@ from pyspark.mllib.recommendation import ALS, Rating
 from pyspark.sql import functions as F
 import random
 from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, ArrayType
-from pyspark.sql.functions import udf, col, sum, explode
+from pyspark.sql.functions import udf, col, sum, explode, count, desc
 import sys
 
 # Initialize Spark session
@@ -117,3 +117,6 @@ print("Length of train_data:", num_rows)
 # print("Length of train_data[0]", num_elements)
 
 train_data.show(10)
+
+popularity = data.groupBy('movieId').agg(sum('rating').alias('total_ratings_sum')).sort(desc('total_ratings_sum'))
+popularity.show(10)
