@@ -5,6 +5,7 @@ spark = SparkSession.builder \
     .getOrCreate()
     
 data = spark.read.csv("ml-latest/ratings.csv", header=True, inferSchema=True, schema="userId INT")
-data.tail(10)
+
+data.tail(1)
 
 spark.stop()

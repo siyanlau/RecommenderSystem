@@ -2,11 +2,10 @@
 # DSGA1004 - BIG DATA
 ## Capstone project
 
-*Handout date*: 2024-04-12
-
-*Checkpoint submission*: 2023-04-28
-
-*Project due date*: 2023-05-14 
+- Please see `Capstone Report` for the final report. 
+- `Segmentation` notebook contains code for question 1-2.
+- `Recommender` notebook contains code for question 3-5.
+- `twin_pairs_similarity` and `random_pairs_similarity` contain the pair wise similarity data, 100 pairs each. 
 
 
 # Overview
